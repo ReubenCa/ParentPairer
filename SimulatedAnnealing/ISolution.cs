@@ -2,7 +2,7 @@
 {
     public interface ISolution
     {
-        public double getScore();
+        public double GetScore();
 
         public ISolution Mutate();
 
