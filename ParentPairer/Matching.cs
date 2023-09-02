@@ -33,22 +33,68 @@ namespace ParentPairer
             {
                 _matching = matching;
             }
+            MarriageScores = new double[_marriages.Length];
         }
-
+        double[] MarriageScores;
         //Index i represents the index of marriage child i belongs to
         private int[] _matching;
         public ISolution Clone()
         {
             return new Matching(_children, _marriages, (int[])_matching.Clone());
         }
-
+        double? Score = null;
         public double GetScore()
         {
-            throw new NotImplementedException();
+            if (Score.HasValue)
+                return (double)Score;
+            
+            NoCacheCalculateScore();
+            return (double)Score;
+        }
+        
+    
+        private void NoCacheCalculateScore()
+        {
+            for(int i = 0; i< _marriages.Length; i++)
+            {
+                MarriageScores[i] = CompatibilityCalculator.Compatibility(
+                    _marriages[i],
+                    _children.Where((child, j) => _matching[j] == i).ToList());
+            }
+            double total = 0;
+            foreach (var score in MarriageScores)
+            {
+                total += score;
+            }
+            Score = total;
+        }
+
+        private void UpdateIndividualScore(int index)
+        {
+           
+            double newScore = CompatibilityCalculator.Compatibility(
+                _marriages[index],
+                _children.Where((child, i) => _matching[i] == index).ToList());
+
+            Score -= MarriageScores[index];
+            Score += newScore;
+            MarriageScores[index] = newScore;
+
+
+
         }
 
         public ISolution Mutate()
         {
+            return new Matching(this);
+        }
+
+        Matching(Matching old)
+        {
+            _children = old._children;
+            _marriages = old._marriages;
+            _matching = (int[])old._matching.Clone();
+            MarriageScores = old.MarriageScores;
             if(r.NextDouble() < swapProbability)
             {
                 int index1 = r.Next(_children.Length);
@@ -57,14 +103,18 @@ namespace ParentPairer
                 int temp = _matching[index1];
                 _matching[index1] = _matching[index2];
                 _matching[index2] = temp;
+                UpdateIndividualScore(_matching[index1]);
+                UpdateIndividualScore(_matching[index2]);
             }
             else
             {
                 int Child  = r.Next(r.Next(_children.Length));
                 int Marriage = r.Next(_marriages.Length);
                 _matching[Child] = Marriage;
+                UpdateIndividualScore(Marriage);
             }
-  
+            Score = null;
+            
         }
     }
 }

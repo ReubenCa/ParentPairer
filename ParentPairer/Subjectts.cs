@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ParentPairer
 {
-    public enum UniversityCourses
+    public enum Subject
     {
         AngloSaxonNorseAndCeltic,
         Archaeology,
@@ -36,9 +36,7 @@ namespace ParentPairer
         LandEconomy,
         Law,
         Linguistics,
-     
-        ManagementStudiesPartIICourse,
-        ManufacturingEngineeringPartIICourse,
+  
         Mathematics,
         Medicine,
         MedicineGraduateCourse,
@@ -50,5 +48,19 @@ namespace ParentPairer
         TheologyReligionAndPhilosophyOfReligion,      
         VeterinaryMedicine
     }
+
+    public enum Activities
+    {
+        BoardGames,
+        MovieNight,
+        VideoGames,
+        TableTennis,
+        DrinkingGames,
+        Pub,
+        Restaurant,
+        Bar,
+        Club
+    }
+
 
 }
