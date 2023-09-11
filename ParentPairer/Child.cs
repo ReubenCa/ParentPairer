@@ -12,9 +12,9 @@ namespace ParentPairer
         public Subject Subject;
         public HashSet<Activities> Activities;
         public bool PreferGoingOut;
-        public bool LikesToDrink;
+        public LikesToDrink LikesToDrink;
 
-        public Child(string name, Subject subject, HashSet<Activities> activities, bool preferGoingOut, bool likesToDrink)
+        public Child(string name, Subject subject, HashSet<Activities> activities, bool preferGoingOut, LikesToDrink likesToDrink)
         {
             Name = name;
             Subject = subject;

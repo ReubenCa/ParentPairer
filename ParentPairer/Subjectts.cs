@@ -8,45 +8,30 @@ namespace ParentPairer
 {
     public enum Subject
     {
-        AngloSaxonNorseAndCeltic,
-        Archaeology,
-        Architecture,
-        AsianAndMiddleEasternStudies,
-       
-        ChemicalEngineeringAndBiotechnology,
-        Classics,
         ComputerScience,
-      
-        Design,
+        Architecture,
         Economics,
         Education,
         Engineering,
         English,
-       
-        FoundationYearInArtsHumanitiesAndSocialSciences,
-       
         Geography,
-       
         History,
         HistoryAndModernLanguages,
         HistoryAndPolitics,
-        HistoryOfArt,
-        HumanSocialAndPoliticalSciences,
-      
-        LandEconomy,
-        Law,
         Linguistics,
-  
         Mathematics,
         Medicine,
-        MedicineGraduateCourse,
-        ModernAndMedievalLanguages,
-        Music,      
-        NaturalSciences,     
+        Music,
+        NaturalSciences,
         Philosophy,
-        PsychologicalAndBehaviouralSciences,      
-        TheologyReligionAndPhilosophyOfReligion,      
-        VeterinaryMedicine
+        PsychologicalAndBehaviouralSciences,
+        Classics,
+        VeterinaryMedicine,
+        ModernAndMedievalLanguages,
+        Law,
+        LandEconomy,
+        HumanSocialAndPoliticalSciences,
+        AngloSaxonNorseAndCeltic
     }
 
     public enum Activities
@@ -60,6 +45,13 @@ namespace ParentPairer
         Restaurant,
         Bar,
         Club
+    }
+
+public enum LikesToDrink
+    {
+        Yes,
+        No,
+        Sometimes
     }
 
 

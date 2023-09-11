@@ -41,7 +41,7 @@ namespace ParentPairer
 
             double SubjectScore = 10;
             double LikesDrinkingScore = 10; 
-            bool parentslike = marriage.LikesToDrink;
+            LikesToDrink parentslike = marriage.LikesToDrink;
             double LikesGoingOutScore = 10;
             bool parentsGoingOut = marriage.PreferGoingOut;
             double ActivitiesScore = 10;
@@ -87,12 +87,12 @@ namespace ParentPairer
 
         private static readonly HashSet<Subject> STEM = new HashSet<Subject>
              {
-            Subject.ChemicalEngineeringAndBiotechnology,
+           
             Subject.ComputerScience,
             Subject.Engineering,
             Subject.Mathematics,
             Subject.Medicine,
-            Subject.MedicineGraduateCourse,
+           
             Subject.NaturalSciences,
            
         };

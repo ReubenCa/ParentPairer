@@ -49,7 +49,7 @@ namespace ParentPairer
                 return (double)Score;
             
             NoCacheCalculateScore();
-            return (double)Score;
+            return (double)Score!;
         }
         
     
