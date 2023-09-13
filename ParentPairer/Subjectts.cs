@@ -54,5 +54,12 @@ public enum LikesToDrink
         Sometimes
     }
 
+    public enum OutOrIn
+    {
+        In,
+        Out,
+        Both
+    }
+
 
 }

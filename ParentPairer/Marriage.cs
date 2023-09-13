@@ -12,11 +12,11 @@ namespace ParentPairer
         public readonly List<Subject> Subjects;
         public readonly HashSet<Activities> Activities;
         public readonly int NumberOfChildren;
-        public readonly bool PreferGoingOut;
+        public readonly OutOrIn PreferGoingOut;
         public readonly LikesToDrink LikesToDrink;
         public readonly bool WillTakeFourChildren;
 
-        public Marriage(List<string> crsids, List<Subject> subjects, HashSet<Activities> activities, int numberOfChildren, bool preferGoingOut, LikesToDrink likesToDrink, bool willTakeFourChildren)
+        public Marriage(List<string> crsids, List<Subject> subjects, HashSet<Activities> activities, int numberOfChildren, OutOrIn preferGoingOut, LikesToDrink likesToDrink, bool willTakeFourChildren)
         {
             Crsids = crsids;
             Subjects = subjects;

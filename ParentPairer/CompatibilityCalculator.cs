@@ -43,7 +43,7 @@ namespace ParentPairer
             double LikesDrinkingScore = 10; 
             LikesToDrink parentslike = marriage.LikesToDrink;
             double LikesGoingOutScore = 10;
-            bool parentsGoingOut = marriage.PreferGoingOut;
+            OutOrIn parentsGoingOut = marriage.PreferGoingOut;
             double ActivitiesScore = 10;
             foreach (var child in children)
             {
@@ -59,14 +59,17 @@ namespace ParentPairer
                 {
                     LikesDrinkingScore *= 0.25;
                 }
-                if (child.PreferGoingOut == parentsGoingOut)
+                throw new NotImplementedException();
+               /* if (child.PreferGoingOut == parentsGoingOut)
                 {
                     LikesGoingOutScore *= 1;
+                
+                
                 }
                 else
                 {
                     LikesGoingOutScore *= 0.1;
-                }
+                }*/
                 
                 int hits = 0;
                 foreach(var activity in child.Activities)
