@@ -62,5 +62,12 @@ namespace ParentPairer
         Club
     }
 
+    public enum LikesDrinking
+    {
+        Yes,
+        No,
+        Sometimes
+    }
+
 
 }
