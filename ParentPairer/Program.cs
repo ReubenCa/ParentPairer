@@ -9,8 +9,12 @@ namespace ParentPairer
             List<Marriage> ms = new List<Marriage>();
             using(StreamReader sr = new StreamReader("C:\\Users\\reube\\source\\repos\\ReubenCa\\ParentPairer\\Data\\Parents\\cleaneddata.csv"))
             {
-                while(!sr.EndOfStream)
+                sr.ReadLine();
+                while (!sr.EndOfStream)
+                {
+                    
                     ms.Add(Serializer.StringToMarriage(sr.ReadLine()!));
+                }
             }
 
         }

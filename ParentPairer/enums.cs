@@ -46,7 +46,8 @@ namespace ParentPairer
         Philosophy,
         PsychologicalAndBehaviouralSciences,      
         TheologyReligionAndPhilosophyOfReligion,      
-        VeterinaryMedicine
+        VeterinaryMedicine,
+        Psychology
     }
 
     public enum Activities

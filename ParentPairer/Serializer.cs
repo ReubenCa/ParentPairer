@@ -1,10 +1,10 @@
 ﻿using ParentPairer;
 using System;
 
-public static class Serializer
+internal static class Serializer
 {
 	
-	public static Marriage StringToMarriage(string str)
+	internal static Marriage StringToMarriage(string str)
     {
         string[] split = str.Split(',');
         List<string> crsids = new List<string>();
@@ -19,20 +19,32 @@ public static class Serializer
         List<Subject> subjects = new List<Subject>();
         subjects.Add(stringtosubject(split[4]));
         subjects.Add(stringtosubject(split[5]));
-        if (split[6] != "")
+        if (split[6] != "none")
         {
             subjects.Add(stringtosubject(split[6]));
         }
         LikesDrinking drinking = stringtolikesdrinking(split[7]);
         bool prefergoingout = split[8] == "out";
 
-        HashSet<Activities> activities = new HashSet<Activities>();
-        string rawactivities = split[9];
-        string[] splitactivities = rawactivities.Split(';');
-        foreach(string activity in splitactivities)
+        /*  HashSet<Activities> activities = new HashSet<Activities>();
+          string rawactivities = split[9];
+          string[] splitactivities = rawactivities.Split(';');
+          foreach(string activity in splitactivities)
+          {
+              activities.Add(stringtoactivities(activity));
+          }*/
+        int numberofchildren;
+        bool willtakemore =split[11] ==  "as many as you can give me";
+        if(!willtakemore)
         {
-            activities.Add(stringtoactivities(activity));
+            numberofchildren = int.Parse(split[11]);
         }
+        else
+        {
+            numberofchildren = 3;
+        }
+        return new Marriage(crsids, subjects, numberofchildren, prefergoingout, drinking, willtakemore);
+       
         
     }
 
@@ -95,12 +107,30 @@ public static class Serializer
                 return Subject.English;
             case "vet":
                 return Subject.VeterinaryMedicine;
+            case "vetmed":
+                return Subject.VeterinaryMedicine;
             case "law":
                 return Subject.Law;
             case "eco":
                 return Subject.Economics;
             case "cs":
                 return Subject.ComputerScience;
+            case "hsps":
+                  return Subject.HumanSocialAndPoliticalSciences;
+            case "pbs":
+                   return Subject.PsychologicalAndBehaviouralSciences;
+            case "music":
+                return Subject.Music;
+            case "psychology":
+                return Subject.Psychology;
+            case "ames":
+                return Subject.AsianAndMiddleEasternStudies;
+            case "arch":
+                return Subject.Architecture;
+            case "lin":
+                return Subject.Linguistics;
+            case "cla":
+                return Subject.Classics;
             default:
                 throw new Exception("Subject not found");
                     }

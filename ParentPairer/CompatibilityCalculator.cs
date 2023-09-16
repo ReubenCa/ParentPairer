@@ -12,6 +12,7 @@ namespace ParentPairer
         
         public static double Compatibility(Marriage marriage, List<Child> children)
         {
+            /*
             double ChildAmountScore;
             int ParentCount = marriage.Subjects.Count;
             if (children.Count > 4 || children.Count <= 1)
@@ -44,7 +45,7 @@ namespace ParentPairer
             bool parentslike = marriage.LikesToDrink;
             double LikesGoingOutScore = 10;
             bool parentsGoingOut = marriage.PreferGoingOut;
-            double ActivitiesScore = 10;
+            //double ActivitiesScore = 10;
             foreach (var child in children)
             {
                 foreach (var subject in marriage.Subjects)
@@ -81,7 +82,8 @@ namespace ParentPairer
             }
 
             return ActivitiesScore * LikesDrinkingScore * LikesGoingOutScore * SubjectScore * ChildAmountScore;
-
+            */
+            return -1;
         }
 
 
