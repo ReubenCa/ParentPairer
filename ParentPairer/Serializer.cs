@@ -48,6 +48,11 @@ internal static class Serializer
         
     }
 
+    public static Child StringToChild(string str)
+    {
+
+    }
+
    /* private static Activities stringtoactivities(string activity)
     {
         switch (activity)

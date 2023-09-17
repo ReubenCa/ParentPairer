@@ -12,7 +12,7 @@ namespace ParentPairer
         
         public static double Compatibility(Marriage marriage, List<Child> children)
         {
-            /*
+            
             double ChildAmountScore;
             int ParentCount = marriage.Subjects.Count;
             if (children.Count > 4 || children.Count <= 1)
@@ -40,50 +40,59 @@ namespace ParentPairer
                 ChildAmountScore = 5;
             }
 
-            double SubjectScore = 10;
-            double LikesDrinkingScore = 10; 
-            bool parentslike = marriage.LikesToDrink;
-            double LikesGoingOutScore = 10;
-            bool parentsGoingOut = marriage.PreferGoingOut;
-            //double ActivitiesScore = 10;
-            foreach (var child in children)
+            double DrinkingScore = 0;
+            if (marriage.LikesToDrink == LikesDrinking.Yes && children.All(c => c.LikesToDrink == LikesDrinking.Yes))
             {
-                foreach (var subject in marriage.Subjects)
-                {
-                    SubjectScore *= SubjectSimilarity(child.Subject, subject);
-                }
-                if (child.LikesToDrink == parentslike)
-                {
-                    LikesDrinkingScore *= 1;
-                }
-                else
-                {
-                    LikesDrinkingScore *= 0.25;
-                }
-                if (child.PreferGoingOut == parentsGoingOut)
-                {
-                    LikesGoingOutScore *= 1;
-                }
-                else
-                {
-                    LikesGoingOutScore *= 0.1;
-                }
-                
-                int hits = 0;
-                foreach(var activity in child.Activities)
-                {
-
-                    if(marriage.Activities.Contains(activity))
-                    {
-                        hits++;
-                    }
-                }
-               ActivitiesScore = (hits / marriage.Activities.Count)*0.4 + 0.6;
+                DrinkingScore = 10;
+            }
+            else if (marriage.LikesToDrink == LikesDrinking.No && children.All(c => c.LikesToDrink == LikesDrinking.No))
+            {
+                DrinkingScore = 10;
+            }
+            else if (marriage.LikesToDrink == LikesDrinking.Sometimes && children.All(c => c.LikesToDrink == LikesDrinking.Sometimes))
+            {
+                DrinkingScore = 10;
+            }
+            else if (marriage.LikesToDrink == LikesDrinking.Yes && children.Any(c => c.LikesToDrink == LikesDrinking.No))
+            {
+                DrinkingScore = 1;
+            }
+            else if (marriage.LikesToDrink == LikesDrinking.No && children.Any(c => c.LikesToDrink == LikesDrinking.Yes))
+            {
+                DrinkingScore = 1;
             }
 
-            return ActivitiesScore * LikesDrinkingScore * LikesGoingOutScore * SubjectScore * ChildAmountScore;
-            */
-            return -1;
+            else
+            {
+                DrinkingScore = 4;
+            }
+
+            double SubjectScore = 0;
+
+            foreach (Subject subject in marriage.Subjects)
+            {
+                double max = 0;
+                foreach (Child child in children)
+                {
+                    double similarity = SubjectSimilarity(subject, child.Subject);
+                    if (similarity > max)
+                    {
+                        max = similarity;
+                    }
+                }
+                SubjectScore += max;
+            }
+            SubjectScore /= children.Count;
+
+            double PreferGoingOutScore = 0;
+
+            foreach (Child c in children)
+            {
+                PreferGoingOutScore += marriage.PreferGoingOut == c.PreferGoingOut ? 6 : 10;
+            }
+
+            return ChildAmountScore * DrinkingScore * SubjectScore * PreferGoingOutScore;
+           
         }
 
 
@@ -104,16 +113,16 @@ namespace ParentPairer
         {
             if(A== B)
             {
-                return 1;
+                return 10;
             }
             
             if(STEM.Contains(A) && STEM.Contains(B))
             {
-                return 0.5;
+                return 5;
             }
             if(!STEM.Contains(A) && !STEM.Contains(B))
             {
-                return 0.5;
+                return 5;
             }
             //TODO Refine
             throw new NotImplementedException();

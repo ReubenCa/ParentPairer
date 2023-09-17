@@ -17,6 +17,9 @@ namespace ParentPairer
                 }
             }
 
+            List<Child> children = new List<Child>();
+            using(StreamReader sr = new StreamReader(""))
+
         }
     }
 }

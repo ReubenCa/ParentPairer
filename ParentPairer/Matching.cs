@@ -91,6 +91,7 @@ namespace ParentPairer
 
         Matching(Matching old)
         {
+            Score = old.GetScore();
             _children = old._children;
             _marriages = old._marriages;
             _matching = (int[])old._matching.Clone();
@@ -108,12 +109,12 @@ namespace ParentPairer
             }
             else
             {
-                int Child  = r.Next(r.Next(_children.Length));
+                int Child  = r.Next(_children.Length);
                 int Marriage = r.Next(_marriages.Length);
                 _matching[Child] = Marriage;
                 UpdateIndividualScore(Marriage);
             }
-            Score = null;
+           
             
         }
     }
