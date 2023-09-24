@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimulatedAnnealing
 {
-    internal class AnnealingRunner
+    public class AnnealingRunner
     {
         private readonly ISolution _initialSolution;
         private readonly double _initialTemperature;

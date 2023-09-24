@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using SimulatedAnnealing;
@@ -89,8 +91,24 @@ namespace ParentPairer
             return new Matching(this);
         }
 
+        internal void WriteToStream(StreamWriter sw)
+        {
+            for(int i = 0; i < _matching.Length; i++)
+            {
+                Child child = _children[i];
+                Marriage marriage = _marriages[_matching[i]];
+                StringBuilder output = new StringBuilder(child.Name);
+                foreach(string c in marriage.Crsids)
+                {
+                    output.Append("," + c);
+                }
+                sw.WriteLine(output);
+            }
+        }
+
         Matching(Matching old)
         {
+            Score = old.GetScore();
             _children = old._children;
             _marriages = old._marriages;
             _matching = (int[])old._matching.Clone();
@@ -108,12 +126,12 @@ namespace ParentPairer
             }
             else
             {
-                int Child  = r.Next(r.Next(_children.Length));
+                int Child  = r.Next(_children.Length);
                 int Marriage = r.Next(_marriages.Length);
                 _matching[Child] = Marriage;
                 UpdateIndividualScore(Marriage);
             }
-            Score = null;
+           
             
         }
     }

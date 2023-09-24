@@ -46,7 +46,8 @@ namespace ParentPairer
         Philosophy,
         PsychologicalAndBehaviouralSciences,      
         TheologyReligionAndPhilosophyOfReligion,      
-        VeterinaryMedicine
+        VeterinaryMedicine,
+        Psychology
     }
 
     public enum Activities
@@ -60,6 +61,13 @@ namespace ParentPairer
         Restaurant,
         Bar,
         Club
+    }
+
+    public enum LikesDrinking
+    {
+        Yes,
+        No,
+        Sometimes
     }
 
 
