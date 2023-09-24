@@ -7,9 +7,11 @@ internal static class Serializer
 	internal static Marriage StringToMarriage(string str)
     {
         string[] split = str.Split(',');
-        List<string> crsids = new List<string>();
-        crsids.Add(split[0]);
-        crsids.Add(split[1]);
+        List<string> crsids = new List<string>
+        {
+            split[0],
+            split[1]
+        };
         if (split[2] != "")
         {
             crsids.Add(split[2]);
@@ -50,7 +52,12 @@ internal static class Serializer
 
     public static Child StringToChild(string str)
     {
-
+        string[] splitstring = str.Split(',');
+        string name = splitstring[0];
+        Subject subject = stringtosubject(splitstring[2]);
+        LikesDrinking drinking = stringtolikesdrinking(splitstring[3]);
+        bool prefergoingout = splitstring[4] == "out";
+        return new Child(name, subject,  prefergoingout, drinking);
     }
 
    /* private static Activities stringtoactivities(string activity)
@@ -90,7 +97,7 @@ internal static class Serializer
     }
     public static Subject stringtosubject(string str)
     {
-        switch(str)
+        switch(str.ToLower())
         {
             case "med":
                 return Subject.Medicine;
@@ -136,6 +143,12 @@ internal static class Serializer
                 return Subject.Linguistics;
             case "cla":
                 return Subject.Classics;
+            case "historyofart":
+                return Subject.HistoryOfArt;
+            case "phi":
+                return Subject.Philosophy;
+            case "edu":
+                return Subject.Education;
             default:
                 throw new Exception("Subject not found");
                     }

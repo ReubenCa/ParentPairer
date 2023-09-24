@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using SimulatedAnnealing;
@@ -87,6 +89,21 @@ namespace ParentPairer
         public ISolution Mutate()
         {
             return new Matching(this);
+        }
+
+        internal void WriteToStream(StreamWriter sw)
+        {
+            for(int i = 0; i < _matching.Length; i++)
+            {
+                Child child = _children[i];
+                Marriage marriage = _marriages[_matching[i]];
+                StringBuilder output = new StringBuilder(child.Name);
+                foreach(string c in marriage.Crsids)
+                {
+                    output.Append("," + c);
+                }
+                sw.WriteLine(output);
+            }
         }
 
         Matching(Matching old)
