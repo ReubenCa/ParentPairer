@@ -28,9 +28,11 @@ namespace ParentPairer
                 }
             }
             Matching matching = new Matching(children.ToArray(), ms.ToArray());
-            SimulatedAnnealing.AnnealingRunner runner = new SimulatedAnnealing.AnnealingRunner(matching, 100, 0.0001, 100, new Random());
+            SimulatedAnnealing.AnnealingRunner runner = new SimulatedAnnealing.AnnealingRunner(matching, 50, 0.0015, 1000, new Random(), 2000);
             Matching finalMatching = (Matching)runner.Run();
-            using(StreamWriter sw = new StreamWriter("C:\\Users\\reube\\source\\repos\\ReubenCa\\ParentPairer\\Data\\Parents\\output.csv"))
+            finalMatching.NoCacheCalculateScore();
+            Console.WriteLine("Found Matching of score " + finalMatching.GetScore());
+            using(StreamWriter sw = new StreamWriter("C:\\Users\\reube\\source\\repos\\ReubenCa\\ParentPairer\\Data\\output.csv"))
             {
                 finalMatching.WriteToStream( sw);
             }   

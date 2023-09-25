@@ -18,9 +18,11 @@ internal static class Serializer
         }
         //3 is plaintext subjects
         //456 
-        List<Subject> subjects = new List<Subject>();
-        subjects.Add(stringtosubject(split[4]));
-        subjects.Add(stringtosubject(split[5]));
+        List<Subject> subjects = new List<Subject>
+        {
+            stringtosubject(split[4]),
+            stringtosubject(split[5])
+        };
         if (split[6] != "none")
         {
             subjects.Add(stringtosubject(split[6]));

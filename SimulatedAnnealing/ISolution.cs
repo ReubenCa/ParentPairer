@@ -4,7 +4,7 @@
     {
         public double GetScore();
 
-        public ISolution Mutate();
+        public ISolution Mutate(double Temperature);
 
         public ISolution Clone();
     }

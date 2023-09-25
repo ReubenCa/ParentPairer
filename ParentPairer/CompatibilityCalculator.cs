@@ -39,40 +39,41 @@ namespace ParentPairer
             {
                 ChildAmountScore = 5;
             }
-
+            bool PerfectDrinking = false;
             double DrinkingScore = 0;
-            if (marriage.LikesToDrink == LikesDrinking.Yes && children.All(c => c.LikesToDrink == LikesDrinking.Yes))
+            if (children.All(c => c.LikesToDrink == marriage.LikesToDrink))
             {
-                DrinkingScore = 10;
+                DrinkingScore = 25;
+                PerfectDrinking = true;
             }
-            else if (marriage.LikesToDrink == LikesDrinking.No && children.All(c => c.LikesToDrink == LikesDrinking.No))
-            {
-                DrinkingScore = 10;
-            }
-            else if (marriage.LikesToDrink == LikesDrinking.Sometimes && children.All(c => c.LikesToDrink == LikesDrinking.Sometimes))
-            {
-                DrinkingScore = 10;
-            }
+         
             else if (marriage.LikesToDrink == LikesDrinking.Yes && children.Any(c => c.LikesToDrink == LikesDrinking.No))
             {
-                DrinkingScore = 1;
+                return -1000;
             }
             else if (marriage.LikesToDrink == LikesDrinking.No && children.Any(c => c.LikesToDrink == LikesDrinking.Yes))
             {
-                DrinkingScore = 1;
+                return -1000;
             }
+
+
 
             else
             {
-                DrinkingScore = 4;
+                DrinkingScore = 0;
+                foreach(Child c in children)
+                {
+                    DrinkingScore += c.LikesToDrink == marriage.LikesToDrink ? 15 : 0;
+                }
+                DrinkingScore /= children.Count;
             }
 
             double SubjectScore = 0;
-
-            foreach (Subject subject in marriage.Subjects)
+            bool PerfectSubject = true;
+            foreach (Child child in children)
             {
                 double max = 0;
-                foreach (Child child in children)
+                foreach (Subject subject in marriage.Subjects)
                 {
                     double similarity = SubjectSimilarity(subject, child.Subject);
                     if (similarity > max)
@@ -80,18 +81,21 @@ namespace ParentPairer
                         max = similarity;
                     }
                 }
+                PerfectSubject = PerfectSubject && max == 25;
                 SubjectScore += max;
             }
             SubjectScore /= children.Count;
 
             double PreferGoingOutScore = 0;
 
-            foreach (Child c in children)
-            {
-                PreferGoingOutScore += marriage.PreferGoingOut == c.PreferGoingOut ? 6 : 10;
-            }
-
-            return ChildAmountScore * DrinkingScore * SubjectScore * PreferGoingOutScore;
+            //foreach (Child c in children)
+            //{
+            //    PreferGoingOutScore += marriage.PreferGoingOut == c.PreferGoingOut ? 7 : 0;
+            //}
+            //PreferGoingOutScore /= children.Count;
+            
+            return ChildAmountScore + DrinkingScore + SubjectScore
+                 + (PerfectSubject && PerfectDrinking ? 15 : 0);// + PreferGoingOutScore;
            
         }
 
@@ -103,29 +107,55 @@ namespace ParentPairer
             Subject.Engineering,
             Subject.Mathematics,
             Subject.Medicine,
-            Subject.MedicineGraduateCourse,
             Subject.NaturalSciences,
            
         };
 
 
+        private static readonly HashSet<Subject> Historyish = new HashSet<Subject>
+        {
+
+            Subject.History,
+            Subject.HistoryAndPolitics,
+            Subject.HistoryAndModernLanguages,
+            Subject.HistoryOfArt,
+            Subject.HumanSocialAndPoliticalSciences
+        };
+
+        private static readonly HashSet<Subject> Languages = new HashSet<Subject>
+        {
+
+        Subject.ModernAndMedievalLanguages,
+                   Subject.Linguistics,
+                   Subject.HistoryAndModernLanguages
+
+        };
+
+        private static readonly HashSet<Subject> Medical = new HashSet<Subject>
+        { 
+            Subject.Medicine,
+                  
+                   Subject.VeterinaryMedicine
+               };
+
         private static double SubjectSimilarity(Subject A, Subject B)
         {
             if(A== B)
             {
+                return 25;
+            }
+
+            if (Medical.Contains(A) && Medical.Contains(B))
+                return 12;
+
+            if (STEM.Contains(A) && STEM.Contains(B))
+            {
+                return 5;
+            }
+            if (Languages.Contains(A) && Languages.Contains(B))
                 return 10;
-            }
-            
-            if(STEM.Contains(A) && STEM.Contains(B))
-            {
-                return 5;
-            }
-            if(!STEM.Contains(A) && !STEM.Contains(B))
-            {
-                return 5;
-            }
-            //TODO Refine
-            throw new NotImplementedException();
+
+            return 1;
         }
     }
 }

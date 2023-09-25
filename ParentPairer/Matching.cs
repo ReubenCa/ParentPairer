@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,7 +14,7 @@ namespace ParentPairer
     {
         //Probability two children swap rather than one just changing parents
         //Could increase as time goes on
-        const double swapProbability = 0.4;
+        const double swapProbability = 10;
 
 
         private readonly Random r = new Random();
@@ -47,15 +49,34 @@ namespace ParentPairer
         double? Score = null;
         public double GetScore()
         {
+
             if (Score.HasValue)
+            {
+                Debug.Assert(CacheAccurate());
                 return (double)Score;
-            
+            }
+             
             NoCacheCalculateScore();
             return (double)Score;
         }
         
+        private bool CacheAccurate()
+        {
+            if (r.NextDouble() < 0.5)
+                return true;//Only check every now and again as otherwise performance is too far degraded
+            if (!Score.HasValue)
+                return true;
+            double cachedScore = Score!.Value;
+            Debug.WriteLine("cachedScore " + cachedScore!);
+             NoCacheCalculateScore();
+            Debug.WriteLine("True Score " + Score!.Value);
+            bool Answer =  Math.Abs(cachedScore - Score!.Value) < 0.1;
+            Score = cachedScore;
+            Debug.WriteLine(Answer);
+            return Answer;
+        }
     
-        private void NoCacheCalculateScore()
+        public void NoCacheCalculateScore()
         {
             for(int i = 0; i< _marriages.Length; i++)
             {
@@ -69,6 +90,7 @@ namespace ParentPairer
                 total += score;
             }
             Score = total;
+         
         }
 
         private void UpdateIndividualScore(int index)
@@ -86,35 +108,60 @@ namespace ParentPairer
 
         }
 
-        public ISolution Mutate()
+        public ISolution Mutate(double Temperature)
         {
-            return new Matching(this);
+            return new Matching(this, Temperature);
         }
 
         internal void WriteToStream(StreamWriter sw)
         {
+            Dictionary<Marriage, List<Child>> matching = new();
             for(int i = 0; i < _matching.Length; i++)
             {
                 Child child = _children[i];
-                Marriage marriage = _marriages[_matching[i]];
-                StringBuilder output = new StringBuilder(child.Name);
-                foreach(string c in marriage.Crsids)
+                Marriage m = _marriages[_matching[i]];
+                if (!matching.ContainsKey(m))
+                    matching[m] = new List<Child>() { child };
+                else
+                    matching[m].Add(child);
+            }
+
+            foreach(KeyValuePair<Marriage, List<Child> > kv in matching )
                 {
-                    output.Append("," + c);
+                    while(kv.Key.Crsids.Count < 3)
+                    {
+                    kv.Key.Crsids.Add("");
+                    }
+                    StringBuilder stringBuilder = new StringBuilder();
+                foreach(string crsid in kv.Key.Crsids)
+                {
+                    stringBuilder.Append(crsid);
+                    stringBuilder.Append(",");
                 }
-                sw.WriteLine(output);
+                foreach(Child child in kv.Value)
+                {
+                    stringBuilder.Append(child.Name);
+                    stringBuilder.Append(",");
+                }
+                stringBuilder.Append(CompatibilityCalculator.Compatibility(kv.Key, kv.Value));
+                sw.WriteLine(stringBuilder.ToString());
             }
         }
 
-        Matching(Matching old)
+
+        static private double? StartingTemperature = null;
+        Matching(Matching old, double Temperature)
         {
+            StartingTemperature ??= Temperature*1.1;
+
             Score = old.GetScore();
             _children = old._children;
             _marriages = old._marriages;
             _matching = (int[])old._matching.Clone();
-            MarriageScores = old.MarriageScores;
-            if(r.NextDouble() < swapProbability)
+            MarriageScores = (double[])old.MarriageScores.Clone();
+            if(r.NextDouble() > 0.1 + Math.Pow(Temperature/(double)(StartingTemperature),2))
             {
+                Debug.WriteLine("Swapping");
                 int index1 = r.Next(_children.Length);
                 int index2 = r.Next(_children.Length);
 
@@ -126,9 +173,12 @@ namespace ParentPairer
             }
             else
             {
+                Debug.WriteLine("Moving");
                 int Child  = r.Next(_children.Length);
                 int Marriage = r.Next(_marriages.Length);
+                int oldmarriage = _matching[Child];
                 _matching[Child] = Marriage;
+                UpdateIndividualScore(oldmarriage);
                 UpdateIndividualScore(Marriage);
             }
            

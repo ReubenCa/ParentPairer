@@ -23,8 +23,7 @@ namespace ParentPairer
         Engineering,
         English,
        
-        FoundationYearInArtsHumanitiesAndSocialSciences,
-       
+        
         Geography,
        
         History,
@@ -39,7 +38,7 @@ namespace ParentPairer
   
         Mathematics,
         Medicine,
-        MedicineGraduateCourse,
+
         ModernAndMedievalLanguages,
         Music,      
         NaturalSciences,     
